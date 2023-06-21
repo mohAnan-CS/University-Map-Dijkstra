@@ -26,8 +26,8 @@ public class GraphReader {
                     isNumBuildEdgeRead = true;
                 }else{
 
-                    if (counter < numberOfBuildings){
-                        //Read Buildings
+                    if (counter <= numberOfBuildings){
+
                         counter++;
                     }else{
                         //Read Edges
