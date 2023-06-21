@@ -3,11 +3,12 @@ package com.birzeit.birzeituniversitymapdijkstra.model;
 public class Vertex {
 
     private String building;
-    private int distance;
+    private int xCoordinate, yCoordinate;
 
-    public Vertex(String building, int distance) {
+    public Vertex(String building, int xCoordinate, int yCoordinate) {
         this.building = building;
-        this.distance = distance;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
 
     public String getBuilding() {
@@ -18,19 +19,28 @@ public class Vertex {
         this.building = building;
     }
 
-    public int getDistance() {
-        return distance;
+    public int getXCoordinate() {
+        return xCoordinate;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
+    public void setXCoordinate(int xCoordinate) {
+        this.xCoordinate = xCoordinate;
+    }
+
+    public int getYCoordinate() {
+        return yCoordinate;
+    }
+
+    public void setYCoordinate(int yCoordinate) {
+        this.yCoordinate = yCoordinate;
     }
 
     @Override
     public String toString() {
         return "Vertex{" +
                 "building='" + building + '\'' +
-                ", distance=" + distance +
+                ", xCoordinate=" + xCoordinate +
+                ", yCoordinate=" + yCoordinate +
                 '}';
     }
 }
