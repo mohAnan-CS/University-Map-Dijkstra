@@ -3,20 +3,15 @@ package com.birzeit.birzeituniversitymapdijkstra;
 import com.birzeit.birzeituniversitymapdijkstra.model.Edge;
 import com.birzeit.birzeituniversitymapdijkstra.model.Graph;
 import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
+import com.birzeit.birzeituniversitymapdijkstra.service.GraphReader;
 
 public class Runner {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
-        Graph graph = new Graph();
-        graph.addVertex("A", 0, 0);
-        graph.addVertex("B", 0, 0);
-        graph.addVertex("C", 0, 0);
-        graph.addAdjacent("A", "B", -1);
-        graph.addAdjacent("A", "C", 10);
-        graph.addAdjacent("A", "C", 3);
+        GraphReader graphReader = new GraphReader();
+        Graph graph = graphReader.readGraphFromFile("buildings.txt");
         graph.printGraph();
-
 
 
 

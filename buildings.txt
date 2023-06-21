@@ -1,0 +1,6 @@
+3 ,2
+Shaeen, 12 , 15
+Tamreed, 16, 18
+adab, 19, 21
+Shaeen,Tamreed,12
+dsfd,adab,14
