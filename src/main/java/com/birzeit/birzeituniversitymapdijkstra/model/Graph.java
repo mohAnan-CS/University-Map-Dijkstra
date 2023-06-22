@@ -6,49 +6,68 @@ import java.util.List;
 
 public class Graph {
 
-    private HashMap<Vertex, List<Edge>> hashMapBuildings ;
-    private HashMap<String, Vertex> hashMapBuildingsNames;
+
+    List<Vertex> buildingList;
+    private int counter = 0;
 
     public Graph() {
-        hashMapBuildings = new HashMap<>();
-        hashMapBuildingsNames = new HashMap<>();
+        buildingList = new ArrayList<>();
     }
 
     public void addVertex(String buildingName, double xCoordinate, double yCoordinate) {
          if (!buildingName.trim().equals("")){
              Vertex vertex = new Vertex(buildingName, xCoordinate, yCoordinate);
-             hashMapBuildings.put(vertex, new ArrayList<>());
-             hashMapBuildingsNames.put(buildingName.toLowerCase(), vertex);
+             vertex.setEdgesList(new ArrayList<>());
+             vertex.setIndex(counter);
+             counter++;
+             buildingList.add(vertex);
+         }else{
+             throw new IllegalArgumentException("Building name can't be empty");
          }
     }
 
-    public void addAdjacent(String sourceBuilding, String destinationBuilding, int distance) {
+    public void addAdjacent(String sourceBuilding, String destinationBuilding, double distance) {
 
-        Vertex srcVertex = new Vertex(sourceBuilding.toLowerCase(), 0, 0);
-        Vertex destVertex = new Vertex(destinationBuilding.toLowerCase(), 0, 0);
-        boolean checkError = false;
+        Vertex srcVertex = getVertex(sourceBuilding);
+        Vertex destVertex = getVertex(destinationBuilding);
 
-        if (!sourceBuilding.trim().equals("") && !destinationBuilding.trim().equals("")) {
-            if (distance >= 0){
-                srcVertex = getVertex(sourceBuilding);
-                destVertex = getVertex(destinationBuilding);
-                if (hashMapBuildings.get(srcVertex) != null && hashMapBuildings.get(destVertex) != null){
-                    hashMapBuildings.get(srcVertex).add(new Edge(sourceBuilding, destinationBuilding, distance));
-                    checkError = true;
-                }
-            }
+        checkBuildingIsFound(srcVertex, destVertex, sourceBuilding, destinationBuilding);
+        checkDistance(distance);
+
+        int indexSrc = srcVertex.getIndex();
+        destVertex.setDistance(distance);
+        buildingList.get(indexSrc).getEdgesList().add(destVertex);
+
+    }
+
+    private void checkDistance(double distance) {
+
+        if (distance == 0){
+            throw new IllegalArgumentException("Distance can't be zero");
         }
 
-        if (!checkError){
-            checkError(srcVertex, destVertex, distance);
+        if (distance < 0){
+            throw new IllegalArgumentException("Distance can't be negative");
+        }
+
+    }
+
+    private void checkBuildingIsFound(Vertex srcVertex, Vertex destVertex, String sourceBuilding, String destinationBuilding) {
+
+        if (srcVertex == null){
+            throw new IllegalArgumentException("Source building '" + sourceBuilding + "' doesn't exist");
+        }
+
+        if (destVertex == null){
+            throw new IllegalArgumentException("Destination building '" + destinationBuilding + "' doesn't exist");
         }
 
     }
 
     private Vertex getVertex(String building) {
 
-        //loop on hashmap and check if the building is found or not and return it
-        for (Vertex vertex : hashMapBuildings.keySet()) {
+        //loop on buildingList and return the vertex
+        for (Vertex vertex : buildingList) {
             if (vertex.getBuilding().equalsIgnoreCase(building)) {
                 return vertex;
             }
@@ -68,33 +87,14 @@ public class Graph {
             throw new IllegalArgumentException("Distance can't be negative between '" + srcVertex.getBuilding() + "' and '" + destVertex.getBuilding() + "'");
         }
 
-        if (srcVertex.getBuilding().trim().equalsIgnoreCase("")){
-            throw new IllegalArgumentException("Source building can't be empty");
-        }
-
-        if (destVertex.getBuilding().trim().equalsIgnoreCase("")){
-            throw new IllegalArgumentException("Destination building can't be empty");
-        }
-
-        if (hashMapBuildings.get(srcVertex) == null){
-            throw new IllegalArgumentException("'" + srcVertex.getBuilding() + "' Source building doesn't exist");
-        }
-
-        if (hashMapBuildings.get(destVertex) == null){
-            throw new IllegalArgumentException("'" + destVertex.getBuilding() + "' Destination building doesn't exist");
-        }
-
     }
 
     public void printGraph(){
 
-        System.out.println("printGraph() method");
-
-        for (Vertex vertex : hashMapBuildings.keySet()) {
-            System.out.print("Vertex : " + vertex );
-            for (Edge edge : hashMapBuildings.get(vertex)) {
-                System.out.print(" --> Edge { Building name : " + edge.getDestinationBuilding()
-                        + ", Distance : " + edge.getDistance() + " }");
+        for (Vertex vertex : buildingList) {
+            System.out.print(vertex.toString());
+            for (Vertex edge : vertex.getEdgesList()) {
+                System.out.print(" --> " + edge.toString());
             }
             System.out.println();
         }

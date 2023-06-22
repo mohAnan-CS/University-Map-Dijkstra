@@ -1,16 +1,27 @@
 package com.birzeit.birzeituniversitymapdijkstra.model;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Vertex {
 
     private String building;
     private double xCoordinate, yCoordinate;
+    private double distance, weight;
+    private int index;
+    private List<Vertex> edgesList;
 
     public Vertex(String building, double xCoordinate, double yCoordinate) {
         this.building = building;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
+    }
+
+    public Vertex(String building, double distance, double weight, List<Vertex> edgesList) {
+        this.building = building;
+        this.distance = distance;
+        this.weight = weight;
+        this.edgesList = edgesList;
     }
 
     public String getBuilding() {
@@ -37,12 +48,46 @@ public class Vertex {
         this.yCoordinate = yCoordinate;
     }
 
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public List<Vertex> getEdgesList() {
+        return edgesList;
+    }
+
+    public void setEdgesList(List<Vertex> edgesList) {
+        this.edgesList = edgesList;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
     @Override
     public String toString() {
         return "Vertex{" +
                 "building='" + building + '\'' +
                 ", xCoordinate=" + xCoordinate +
                 ", yCoordinate=" + yCoordinate +
+                ", distance=" + distance +
+                ", weight=" + weight +
                 '}';
     }
 

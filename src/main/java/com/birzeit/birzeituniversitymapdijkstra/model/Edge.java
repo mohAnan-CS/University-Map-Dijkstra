@@ -36,12 +36,9 @@ public class Edge {
         this.distance = distance;
     }
 
+    //to string
     @Override
     public String toString() {
-        return "Edge{" +
-                "sourceBuilding='" + sourceBuilding + '\'' +
-                ", destinationBuilding='" + destinationBuilding + '\'' +
-                ", distance=" + distance +
-                '}';
+        return "Edge{" + "sourceBuilding=" + sourceBuilding + ", destinationBuilding=" + destinationBuilding + ", distance=" + distance + '}';
     }
 }
