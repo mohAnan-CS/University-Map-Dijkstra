@@ -3,7 +3,7 @@ package com.birzeit.birzeituniversitymapdijkstra.model;
 import java.util.List;
 import java.util.Objects;
 
-public class Vertex {
+public class Vertex implements Comparable<Vertex> {
 
     private String building;
     private double xCoordinate, yCoordinate;
@@ -108,5 +108,10 @@ public class Vertex {
     @Override
     public int hashCode() {
         return Objects.hash(building, xCoordinate, yCoordinate);
+    }
+
+    @Override
+    public int compareTo(Vertex other) {
+        return Double.compare(this.distance, other.distance);
     }
 }

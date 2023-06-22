@@ -6,10 +6,11 @@ import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class GraphReader {
 
-    public Graph readGraphFromFile(String path) throws Exception {
+    public List<Vertex> readGraphFromFile(String path) throws Exception {
 
         Graph graph = new Graph();
 
@@ -69,7 +70,10 @@ public class GraphReader {
             exception.printStackTrace();
         }
 
-        return graph;
+        System.out.println("REaderrrrrrrrrrrrrrrrrr");
+        List<Vertex> vertices = Graph.buildingList;
+        System.out.println(vertices.size());
+        return Graph.buildingList;
 
     }
 

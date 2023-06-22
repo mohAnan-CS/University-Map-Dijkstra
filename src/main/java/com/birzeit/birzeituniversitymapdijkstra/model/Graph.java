@@ -7,7 +7,7 @@ import java.util.List;
 public class Graph {
 
 
-    List<Vertex> buildingList;
+    public static List<Vertex> buildingList;
     private int counter = 0;
 
     public Graph() {
@@ -52,7 +52,7 @@ public class Graph {
 
     }
 
-    private void checkBuildingIsFound(Vertex srcVertex, Vertex destVertex, String sourceBuilding, String destinationBuilding) {
+    public void checkBuildingIsFound(Vertex srcVertex, Vertex destVertex, String sourceBuilding, String destinationBuilding) {
 
         if (srcVertex == null){
             throw new IllegalArgumentException("Source building '" + sourceBuilding + "' doesn't exist");
@@ -64,11 +64,13 @@ public class Graph {
 
     }
 
-    private Vertex getVertex(String building) {
+    public Vertex getVertex(String building) {
 
+        System.out.println("getVertex() invoke");
         //loop on buildingList and return the vertex
         for (Vertex vertex : buildingList) {
-            if (vertex.getBuilding().equalsIgnoreCase(building)) {
+            System.out.println("Building vertex " + vertex.getBuilding() + " | src building : " + building);
+            if (vertex.getBuilding().trim().equalsIgnoreCase(building)) {
                 return vertex;
             }
         }
