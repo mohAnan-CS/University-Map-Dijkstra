@@ -1,6 +1,11 @@
-3 ,2
-Shaeen, 12 , 15
-Tamreed, 16, 18
-adab, 19, 21
-Shaeen,Tamreed,12
-Shaeen,adab,14
+5 ,4
+Tulkarm, 12 , 15
+Nablus, 16, 18
+Jenin, 19, 21
+Ramallah, 22, 24
+Hebron, 22, 24
+Tulkarm,Nablus,12
+Tulkarm,Jenin,14
+Tulkarm,Ramallah,16
+Ramallah,Hebron,18
+Jenin,Hebron,5

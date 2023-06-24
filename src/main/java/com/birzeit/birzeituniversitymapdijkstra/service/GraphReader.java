@@ -27,8 +27,6 @@ public class GraphReader {
                     String[] lineSplit = line.split(",");
                     numberOfBuildings = Integer.parseInt(lineSplit[0].trim());
                     numberOfEdges = Integer.parseInt(lineSplit[1].trim());
-                    System.out.println("Number of Buildings: " + numberOfBuildings);
-                    System.out.println("Number of Edges: " + numberOfEdges);
                     isNumBuildEdgeRead = true;
                 }else{
 
@@ -40,11 +38,7 @@ public class GraphReader {
                         double xCoordinate = Double.parseDouble(lineSplit[1].trim());
                         double yCoordinate = Double.parseDouble(lineSplit[2].trim());
                         graph.addVertex(buildingName.toLowerCase(), xCoordinate, yCoordinate);
-                        System.out.println("Building Name: " + buildingName);
-                        System.out.println("X Coordinate: " + xCoordinate);
-                        System.out.println("Y Coordinate: " + yCoordinate);
 
-                        System.out.println("====================================");
                         counter++;
 
                     }else{
@@ -55,9 +49,7 @@ public class GraphReader {
                         String destinationBuilding = lineSplit[1].trim();
                         int distance = Integer.parseInt(lineSplit[2].trim());
                         graph.addAdjacent(sourceBuilding, destinationBuilding, distance);
-                        System.out.println("Source Building: " + sourceBuilding);
-                        System.out.println("Destination Building: " + destinationBuilding);
-                        System.out.println("Distance: " + distance);
+                        counter++;
 
                     }
                 }
@@ -70,7 +62,6 @@ public class GraphReader {
             exception.printStackTrace();
         }
 
-        System.out.println("REaderrrrrrrrrrrrrrrrrr");
         List<Vertex> vertices = Graph.buildingList;
         System.out.println(vertices.size());
         return Graph.buildingList;

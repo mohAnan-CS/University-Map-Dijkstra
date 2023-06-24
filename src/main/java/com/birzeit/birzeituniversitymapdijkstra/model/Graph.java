@@ -66,10 +66,8 @@ public class Graph {
 
     public Vertex getVertex(String building) {
 
-        System.out.println("getVertex() invoke");
         //loop on buildingList and return the vertex
         for (Vertex vertex : buildingList) {
-            System.out.println("Building vertex " + vertex.getBuilding() + " | src building : " + building);
             if (vertex.getBuilding().trim().equalsIgnoreCase(building)) {
                 return vertex;
             }

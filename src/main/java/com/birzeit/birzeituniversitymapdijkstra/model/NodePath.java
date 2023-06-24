@@ -6,7 +6,7 @@ public class NodePath implements Comparable<NodePath>{
         private String node;
         private double distance;
 
-        public NodePath(String node, int distance) {
+        public NodePath(String node, double distance) {
             this.node = node;
             this.distance = distance;
         }

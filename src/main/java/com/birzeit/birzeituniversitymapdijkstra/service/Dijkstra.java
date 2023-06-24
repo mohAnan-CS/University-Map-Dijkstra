@@ -24,35 +24,36 @@ public class Dijkstra {
             }
         }
         Graph graph = new Graph();
-        System.out.println("Source : " + source);
         Vertex srcVertex = getVertex(source, buildingList);
-        System.out.println("Source building : " + srcVertex.getBuilding());
         Vertex destVertex = getVertex(destination, buildingList);
 
         graph.checkBuildingIsFound(srcVertex, destVertex, source, destination);
 
-        HashMap<String, Integer> distances = new HashMap<>();
+        HashMap<String, Double> distances = new HashMap<>();
         HashMap<String, String> previous = new HashMap<>();
 
         //loop on buildingList and set the distance of each building to infinity
         for (Vertex vertex : buildingList) {
-            distances.put(vertex.getBuilding(), Integer.MAX_VALUE);
+            distances.put(vertex.getBuilding(), Double.MAX_VALUE);
             previous.put(vertex.getBuilding(), null);
         }
 
         //set the distance of the source building to 0
-        distances.put(source, 0);
+        distances.put(source, 0.0);
 
         //Create priority queue to store the buildings and their distances
         PriorityQueue<NodePath> queue = new PriorityQueue<>();
         queue.add(new NodePath(source, 0));
         while (!queue.isEmpty()){
+            System.out.println("while state");
             NodePath current = queue.poll();
+            System.out.println("Current: " + current.getNode());
             String currentNode = current.getNode();
             double currentDistance = current.getDistance();
 
-            if (currentNode.equals(destination)) {
+            if (currentNode.trim().equalsIgnoreCase(destination)) {
                 // Destination reached, construct the shortest path
+
                 System.out.println("if state");
                 List<String> path = new ArrayList<>();
                 while (currentNode != null) {
@@ -61,6 +62,26 @@ public class Dijkstra {
                 }
                 return path;
             }
+
+            // Visit all neighboring nodes
+            List<Vertex> neighbors = getVertex(currentNode, buildingList).getEdgesList();
+            if (neighbors != null) {
+                for (Vertex neighbor : neighbors) {
+                    String neighborNode = neighbor.getBuilding();
+                    double neighborDistance = neighbor.getDistance();
+                    double newDistance = currentDistance + neighborDistance;
+
+                    if (newDistance < distances.get(neighborNode)) {
+                        // Update the distance and previous node
+                        distances.put(neighborNode, newDistance);
+                        previous.put(neighborNode, currentNode);
+
+                        // Add the neighbor to the priority queue
+                        queue.add(new NodePath(neighborNode, newDistance));
+                    }
+                }
+            }
+
         }
 
         return null;
@@ -68,14 +89,9 @@ public class Dijkstra {
     }
 
     private Vertex getVertex(String buildingName, List<Vertex> buildingList) {
-        System.out.println("GETTT VETETTESXX");
-
-
-        System.out.println(buildingList.size());
 
         for (Vertex vertex : buildingList) {
-            System.out.println("Vertex: " + vertex.getBuilding() );
-            if (vertex.getBuilding().equals(buildingName)) {
+            if (vertex.getBuilding().equalsIgnoreCase(buildingName)) {
                 return vertex;
             }
         }
