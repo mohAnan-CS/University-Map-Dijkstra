@@ -1,6 +1,8 @@
 package com.birzeit.birzeituniversitymapdijkstra.controller;
 
 import com.birzeit.birzeituniversitymapdijkstra.model.Building;
+import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
+import com.birzeit.birzeituniversitymapdijkstra.service.GraphReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,24 +51,30 @@ public class MapController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        List<Building> buildingArrayList = readBuildingDataFromFile("buildings.txt");
-        System.out.println(buildingArrayList.size());
-        for (Building building : buildingArrayList) {
-            System.out.println(building);
+        try {
+            //Read data from building file
+            GraphReader graphReader = new GraphReader();
+            List<Vertex> buildingList = graphReader.readGraphFromFile("buildings.txt");
+            drawCircleOnMap(buildingList);
+            fillComboBox(buildingList);
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-        drawCircleOnMap(buildingArrayList);
-        fillComboBox(buildingArrayList);
+
+
+
 
     }
 
-    private void drawCircleOnMap(List<Building> buildingsList) {
+    private void drawCircleOnMap(List<Vertex> buildingsList) {
 
         for (int i = 0; i < buildingsList.size(); i++) {
 
-            String buildingName = buildingsList.get(i).getBuildingName();
-            double x = buildingsList.get(i).getxCoordinate();
-            double y = buildingsList.get(i).getyCoordinate();
+            String buildingName = buildingsList.get(i).getBuilding();
+            double x = buildingsList.get(i).getXCoordinate();
+            double y = buildingsList.get(i).getYCoordinate();
 
             Circle circle = new Circle();
             circle.setCenterX(x);
@@ -137,28 +145,6 @@ public class MapController implements Initializable {
 
     }
 
-    public List<Building> readBuildingDataFromFile(String filename) {
-        List<Building> buildings = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(", ");
-                if (data.length == 3) {
-                    String buildingName = data[0];
-                    double x = Double.parseDouble(data[1]);
-                    double y = Double.parseDouble(data[2]);
-                    Building building = new Building(buildingName, x, y);
-                    buildings.add(building);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred while reading the file: " + e.getMessage());
-        }
-
-        return buildings;
-    }
-
 
     public double calculateDistance(double x1, double y1, double x2, double y2) {
         return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
@@ -185,13 +171,13 @@ public class MapController implements Initializable {
 
     }
 
-    private void fillComboBox(List<Building> arrayList) {
+    private void fillComboBox(List<Vertex> arrayList) {
 
         ObservableList<String> listSource = FXCollections.observableArrayList();
         ObservableList<String> listDest = FXCollections.observableArrayList();
 
-        for (Building building : arrayList) {
-            String buildingName = building.getBuildingName();
+        for (Vertex building : arrayList) {
+            String buildingName = building.getBuilding();
             listSource.add(buildingName);
             listDest.add(buildingName);
         }
@@ -225,6 +211,32 @@ public class MapController implements Initializable {
             }
         });
         destinationComboBox.setItems(listDest);
+        destinationComboBox.setStyle("-fx-background-color: #e33131; -fx-font-size: 14px; -fx-padding: 5px; -fx-font-weight: bold ;" +
+                "-fx-border-color: #1e1c1c; -fx-border-width: 4px; -fx-border-radius: 5px; -fx-background-radius: 16px;" +
+                "-fx-cell-hover-color: #e33131; " );
+
+        destinationComboBox.setCellFactory(param -> new ListCell<String>() {
+            private final ImageView icon = new ImageView(new Image("C:\\Users\\twitter\\IdeaProjects\\BirzeitUniversityMapDijkstra\\src\\main\\java\\com\\birzeit\\birzeituniversitymapdijkstra\\images\\building.png"));
+
+            {
+                // Set the desired size of the icon
+                icon.setFitWidth(16);
+                icon.setFitHeight(16);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setGraphic(icon);
+                }
+            }
+        });
 
     }
 }
