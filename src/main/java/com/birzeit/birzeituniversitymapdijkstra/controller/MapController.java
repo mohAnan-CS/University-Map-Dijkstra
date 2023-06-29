@@ -82,6 +82,7 @@ public class MapController implements Initializable {
 
             circle.setOnMousePressed(mouseEvent -> {
 
+                System.out.println(buildingName);
 
             });
 
