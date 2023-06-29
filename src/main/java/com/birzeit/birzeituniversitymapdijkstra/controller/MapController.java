@@ -4,10 +4,16 @@ import com.birzeit.birzeituniversitymapdijkstra.model.Building;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -31,7 +37,70 @@ public class MapController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        System.out.println("Distance = " + calculateDistance(619, 501,507, 584));
+        List<Building> buildingArrayList = readBuildingDataFromFile("buildings.txt");
+        System.out.println(buildingArrayList.size());
+        for (Building building : buildingArrayList) {
+            System.out.println(building);
+        }
+
+        drawCircleOnMap(buildingArrayList);
+
+    }
+
+    private void drawCircleOnMap(List<Building> buildingsList) {
+
+        for (int i = 0; i < buildingsList.size(); i++) {
+
+            String buildingName = buildingsList.get(i).getBuildingName();
+            double x = buildingsList.get(i).getxCoordinate();
+            double y = buildingsList.get(i).getyCoordinate();
+
+            Circle circle = new Circle();
+            circle.setCenterX(x);
+            circle.setCenterY(y);
+            circle.setRadius(6.5);
+            anchorPane.getChildren().add(circle);
+
+            Label label = new Label();
+            label.setText(" " + buildingName + " ");
+
+            circle.setOnMousePressed(mouseEvent -> {
+
+
+            });
+
+            circle.setOnMouseEntered(mouseEvent -> {
+
+                label.setLayoutY(y - 14);
+                label.setLayoutX(x);
+                label.setStyle("-fx-font-size: 30");
+                label.setStyle("-fx-background-color: #16ad35;");
+                label.setStyle("-fx-font-weight: bold");
+                BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), null);
+
+                // Create a background with the background fill
+                Background background = new Background(backgroundFill);
+
+                // Set the background of the label
+                label.setBackground(background);
+
+                anchorPane.getChildren().add(label);
+
+            });
+
+            circle.setOnMouseExited(mouseEvent -> {
+
+                anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
+
+
+            });
+
+
+        }
+
+    }
+
+    private void collectBuildingData(){
 
         anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             if (!textFiled.getText().trim().equalsIgnoreCase("")) {
@@ -44,8 +113,6 @@ public class MapController implements Initializable {
                 textFiled.setText("");
             }
         });
-
-
 
     }
 
