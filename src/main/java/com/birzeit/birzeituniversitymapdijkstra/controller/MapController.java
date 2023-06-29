@@ -14,6 +14,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -59,6 +60,9 @@ public class MapController implements Initializable {
             circle.setCenterX(x);
             circle.setCenterY(y);
             circle.setRadius(6.5);
+            circle.setFill(Color.RED);
+            circle.setStroke(Color.BLACK);
+            circle.setStrokeWidth(1.5);
             anchorPane.getChildren().add(circle);
 
             Label label = new Label();
@@ -71,12 +75,15 @@ public class MapController implements Initializable {
 
             circle.setOnMouseEntered(mouseEvent -> {
 
-                label.setLayoutY(y - 14);
+                label.setLayoutY(y - 27);
                 label.setLayoutX(x);
-                label.setStyle("-fx-font-size: 30");
-                label.setStyle("-fx-background-color: #16ad35;");
-                label.setStyle("-fx-font-weight: bold");
-                BackgroundFill backgroundFill = new BackgroundFill(Color.LIGHTBLUE, new CornerRadii(10), null);
+                label.setStyle("-fx-font-weight: bold;");
+                label.setStyle("-fx-text-fill: white;");
+                label.setFont(Font.font(15));
+                circle.setRadius(8.5);
+                circle.setStrokeWidth(2.5);
+
+                BackgroundFill backgroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(10), null);
 
                 // Create a background with the background fill
                 Background background = new Background(backgroundFill);
@@ -90,6 +97,8 @@ public class MapController implements Initializable {
 
             circle.setOnMouseExited(mouseEvent -> {
 
+                circle.setRadius(6.5);
+                circle.setStrokeWidth(1.5);
                 anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
 
 
