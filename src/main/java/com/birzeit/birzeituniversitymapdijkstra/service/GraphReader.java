@@ -63,7 +63,6 @@ public class GraphReader {
         }
 
         List<Vertex> vertices = Graph.buildingList;
-        System.out.println(vertices.size());
         return Graph.buildingList;
 
     }

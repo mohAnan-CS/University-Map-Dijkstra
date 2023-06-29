@@ -26,8 +26,8 @@
          </image>
       </ImageView>
       <Line endX="1122.0" endY="7.62939453125E-6" layoutX="225.0" layoutY="107.0" startX="-227.40000915527344" startY="7.62939453125E-6" stroke="#ee0101" strokeWidth="5.0" />
-      <TextArea layoutX="1064.0" layoutY="540.0" prefHeight="156.0" prefWidth="245.0" />
-      <TextField layoutX="1090.0" layoutY="469.0" />
+      <TextArea fx:id="pathTextArea" layoutX="1064.0" layoutY="540.0" prefHeight="156.0" prefWidth="245.0" />
+      <TextField fx:id="distanceTextField" layoutX="1090.0" layoutY="469.0" />
       <Text fill="#bfb8b8" layoutX="1008.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source">
          <font>
             <Font size="23.0" />
@@ -42,5 +42,10 @@
       <Button layoutX="1248.0" layoutY="136.0" mnemonicParsing="false" onAction="#buttonOnAction" text="Button" />
       <ComboBox fx:id="sourceComboBox" layoutX="1132.0" layoutY="195.0" prefHeight="26.0" prefWidth="185.0" />
       <ComboBox fx:id="destinationComboBox" layoutX="1129.0" layoutY="269.0" prefHeight="26.0" prefWidth="192.0" />
+      <Button layoutX="1140.0" layoutY="388.0" mnemonicParsing="false" onAction="#travelOnAction" text="Travel">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

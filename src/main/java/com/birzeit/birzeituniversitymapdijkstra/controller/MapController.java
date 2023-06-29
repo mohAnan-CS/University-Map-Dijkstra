@@ -1,17 +1,17 @@
 package com.birzeit.birzeituniversitymapdijkstra.controller;
 
 import com.birzeit.birzeituniversitymapdijkstra.model.Building;
+import com.birzeit.birzeituniversitymapdijkstra.model.DijkstraResult;
+import com.birzeit.birzeituniversitymapdijkstra.model.Graph;
 import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
+import com.birzeit.birzeituniversitymapdijkstra.service.Dijkstra;
 import com.birzeit.birzeituniversitymapdijkstra.service.GraphReader;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +21,7 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
@@ -46,7 +47,14 @@ public class MapController implements Initializable {
     @FXML
     private ComboBox<String> destinationComboBox;
 
-    ArrayList<Building> arrayList = new ArrayList<>();
+    @FXML
+    private TextField distanceTextField;
+
+    @FXML
+    private TextArea pathTextArea;
+
+    public static List<Vertex> buildingList = new ArrayList<>();
+    public List<Line> lineList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,7 +62,7 @@ public class MapController implements Initializable {
         try {
             //Read data from building file
             GraphReader graphReader = new GraphReader();
-            List<Vertex> buildingList = graphReader.readGraphFromFile("buildings.txt");
+            buildingList = graphReader.readGraphFromFile("buildings.txt");
             drawCircleOnMap(buildingList);
             fillComboBox(buildingList);
 
@@ -66,6 +74,79 @@ public class MapController implements Initializable {
 
 
 
+    }
+
+    @FXML
+    void travelOnAction() {
+
+        anchorPane.getChildren().removeAll(lineList);
+
+        String sourceBuilding = sourceComboBox.getValue();
+        String destBuilding = destinationComboBox.getValue();
+
+        Dijkstra dijkstra = new Dijkstra();
+        DijkstraResult dijkstraResult = dijkstra.findShortestPath(buildingList,sourceBuilding,destBuilding);
+
+        List<String> path = dijkstraResult.getPath();
+        double distance = dijkstraResult.getDistance();
+
+        distanceTextField.setText(String.valueOf(distance));
+
+        StringBuilder pathString = new StringBuilder();
+        for (String s : path) {
+            pathString.append(s).append(" -> ");
+        }
+
+        pathTextArea.setText(pathString.toString());
+        drawLinesPath(path);
+
+
+    }
+
+    private void drawLinesPath(List<String> path){
+
+        //loop on path list
+        for (int i = 0; i < path.size()-1; i++) {
+            String buildingOne = path.get(i);
+            String buildingTwo = path.get(i+1);
+            Vertex vertexOne = getVertex(buildingOne.trim());
+            Vertex vertexTwo = getVertex(buildingTwo.trim());
+
+            double x1 = vertexOne.getXCoordinate();
+            double y1 = vertexOne.getYCoordinate();
+            double x2 = vertexTwo.getXCoordinate();
+            double y2 = vertexTwo.getYCoordinate();
+
+            createLine(x1,y1,x2,y2);
+        }
+
+    }
+
+    private void createLine(double x1, double y1, double x2, double y2) {
+
+        Line line = new Line();
+        line.setStartX(x1);
+        line.setStartY(y1);
+        line.setEndX(x2);
+        line.setEndY(y2);
+        line.setStrokeWidth(3);
+        line.setStroke(Color.RED);
+        //Create array to store line nodes
+        lineList.add(line);
+
+        anchorPane.getChildren().add(line);
+
+    }
+
+    public Vertex getVertex(String building) {
+
+        //loop on buildingList and return the vertex
+        for (Vertex vertex : buildingList) {
+            if (vertex.getBuilding().trim().equalsIgnoreCase(building)) {
+                return vertex;
+            }
+        }
+        return null;
     }
 
     private void drawCircleOnMap(List<Vertex> buildingsList) {
@@ -131,17 +212,17 @@ public class MapController implements Initializable {
 
     private void collectBuildingData(){
 
-        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            if (!textFiled.getText().trim().equalsIgnoreCase("")) {
-                String buildingName = textFiled.getText();
-                double x = event.getX();
-                double y = event.getY();
-                System.out.println("Building Name : " + buildingName + " at (" + x + ", " + y + ")");
-                Building building = new Building(buildingName, x, y);
-                arrayList.add(building);
-                textFiled.setText("");
-            }
-        });
+//        anchorPane.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+//            if (!textFiled.getText().trim().equalsIgnoreCase("")) {
+//                String buildingName = textFiled.getText();
+//                double x = event.getX();
+//                double y = event.getY();
+//                System.out.println("Building Name : " + buildingName + " at (" + x + ", " + y + ")");
+//                Building building = new Building(buildingName, x, y);
+//                arrayList.add(building);
+//                textFiled.setText("");
+//            }
+//        });
 
     }
 
@@ -159,15 +240,15 @@ public class MapController implements Initializable {
 
     private void writeBuildingToFile(String path){
 
-        try (FileWriter writer = new FileWriter(path)) {
-            for (Building building : arrayList) {
-                String buildingInfo = building.getBuildingName() + ", " + building.getxCoordinate() + ", " + building.getyCoordinate() + "\n";
-                writer.write(buildingInfo);
-            }
-            System.out.println("Building information has been written to the file path: " + path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try (FileWriter writer = new FileWriter(path)) {
+//            for (Building building : arrayList) {
+//                String buildingInfo = building.getBuildingName() + ", " + building.getxCoordinate() + ", " + building.getyCoordinate() + "\n";
+//                writer.write(buildingInfo);
+//            }
+//            System.out.println("Building information has been written to the file path: " + path);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 

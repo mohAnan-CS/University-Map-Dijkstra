@@ -17,12 +17,9 @@ public class Runner {
         //graph.printGraph();
         System.out.println("---------------------");
         Dijkstra dijkstra = new Dijkstra();
-        List<String> list = dijkstra.findShortestPath(Graph.buildingList , "Tulkarm", "Hebron");
+        //List<String> list = dijkstra.findShortestPath(Graph.buildingList , "Tulkarm", "Hebron");
         //loop on list string
-        for (String s : list) {
 
-            System.out.print(s + " -> ");
-        }
 
 
 

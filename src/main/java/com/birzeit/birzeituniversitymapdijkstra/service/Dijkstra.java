@@ -1,9 +1,6 @@
 package com.birzeit.birzeituniversitymapdijkstra.service;
 
-import com.birzeit.birzeituniversitymapdijkstra.model.Edge;
-import com.birzeit.birzeituniversitymapdijkstra.model.Graph;
-import com.birzeit.birzeituniversitymapdijkstra.model.NodePath;
-import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
+import com.birzeit.birzeituniversitymapdijkstra.model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +9,7 @@ import java.util.PriorityQueue;
 
 public class Dijkstra {
 
-    public List<String> findShortestPath(List<Vertex> buildingList, String source, String destination) {
+    public DijkstraResult findShortestPath(List<Vertex> buildingList, String source, String destination) {
 
         System.out.println(buildingList.size());
 
@@ -60,7 +57,10 @@ public class Dijkstra {
                     path.add(0, currentNode);
                     currentNode = previous.get(currentNode);
                 }
-                return path;
+
+                double distance = distances.get(destination);
+
+                return new DijkstraResult(path, distance);
             }
 
             // Visit all neighboring nodes
