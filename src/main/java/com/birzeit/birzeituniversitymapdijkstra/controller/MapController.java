@@ -1,11 +1,16 @@
 package com.birzeit.birzeituniversitymapdijkstra.controller;
 
 import com.birzeit.birzeituniversitymapdijkstra.model.Building;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -33,6 +38,12 @@ public class MapController implements Initializable {
     @FXML
     private TextField textFiled;
 
+    @FXML
+    private ComboBox<String> sourceComboBox;
+
+    @FXML
+    private ComboBox<String> destinationComboBox;
+
     ArrayList<Building> arrayList = new ArrayList<>();
 
     @Override
@@ -45,6 +56,7 @@ public class MapController implements Initializable {
         }
 
         drawCircleOnMap(buildingArrayList);
+        fillComboBox(buildingArrayList);
 
     }
 
@@ -100,7 +112,6 @@ public class MapController implements Initializable {
                 circle.setRadius(6.5);
                 circle.setStrokeWidth(1.5);
                 anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
-
 
             });
 
@@ -170,6 +181,49 @@ public class MapController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void fillComboBox(List<Building> arrayList) {
+
+        ObservableList<String> listSource = FXCollections.observableArrayList();
+        ObservableList<String> listDest = FXCollections.observableArrayList();
+
+        for (Building building : arrayList) {
+            String buildingName = building.getBuildingName();
+            listSource.add(buildingName);
+            listDest.add(buildingName);
+        }
+
+        sourceComboBox.setStyle("-fx-background-color: #e33131; -fx-font-size: 14px; -fx-padding: 5px; -fx-font-weight: bold ;" +
+                "-fx-border-color: #1e1c1c; -fx-border-width: 4px; -fx-border-radius: 5px; -fx-background-radius: 16px;" +
+                "-fx-cell-hover-color: #e33131; " );
+
+        sourceComboBox.setItems(listSource);
+
+        sourceComboBox.setCellFactory(param -> new ListCell<String>() {
+            private final ImageView icon = new ImageView(new Image("C:\\Users\\twitter\\IdeaProjects\\BirzeitUniversityMapDijkstra\\src\\main\\java\\com\\birzeit\\birzeituniversitymapdijkstra\\images\\building.png"));
+
+            {
+                // Set the desired size of the icon
+                icon.setFitWidth(16);
+                icon.setFitHeight(16);
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    setText(item);
+                    setGraphic(icon);
+                }
+            }
+        });
+        destinationComboBox.setItems(listDest);
 
     }
 }
