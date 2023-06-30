@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1347.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.birzeit.birzeituniversitymapdijkstra.controller.MapController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="775.0" prefWidth="1347.0" style="-fx-background-color: white;" stylesheets="@stylesheet.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.birzeit.birzeituniversitymapdijkstra.controller.MapController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#fffdfd" height="107.0" stroke="WHITE" strokeType="INSIDE" width="1347.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <Text fill="#ff0909" layoutX="460.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Birzeit University Map">

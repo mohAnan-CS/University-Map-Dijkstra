@@ -66,6 +66,8 @@ public class MapController implements Initializable {
             drawCircleOnMap(buildingList);
             fillComboBox(buildingList);
 
+            pathTextArea.setWrapText(true); // Enable text wrapping
+            pathTextArea.setStyle("-fx-font-size: 14px; -fx-font-family: Arial;-fx-display-caret:true;"); // Customize font size and family
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,8 +95,29 @@ public class MapController implements Initializable {
         distanceTextField.setText(String.valueOf(distance));
 
         StringBuilder pathString = new StringBuilder();
+        int count = 0;
         for (String s : path) {
-            pathString.append(s).append(" -> ");
+            if (count == 0){
+                pathString.append(s);
+                pathString.append(" \n ");
+                pathString.append(" \u2193 ");
+                pathString.append(" \n ");
+                count++;
+            }else {
+                if (path.size()-1 == count){
+                    pathString.append(" \n ");
+                    pathString.append(s);
+                    pathString.append(" \n ");
+                    break;
+                }
+                pathString.append(" \n ");
+                pathString.append(s);
+                pathString.append(" \n ");
+                pathString.append(" \u2193 ");
+                pathString.append(" \n ");
+                count++;
+            }
+
         }
 
         pathTextArea.setText(pathString.toString());
