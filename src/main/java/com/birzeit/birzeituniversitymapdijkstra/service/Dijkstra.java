@@ -11,15 +11,6 @@ public class Dijkstra {
 
     public DijkstraResult findShortestPath(List<Vertex> buildingList, String source, String destination) {
 
-        System.out.println(buildingList.size());
-
-        //loop on buildingList and print the buildings
-        for (Vertex vertex : buildingList) {
-            System.out.println(vertex.getBuilding());
-            for (Vertex vertex1 : vertex.getEdgesList()){
-                System.out.println(vertex1.getBuilding());
-            }
-        }
         Graph graph = new Graph();
         Vertex srcVertex = getVertex(source, buildingList);
         Vertex destVertex = getVertex(destination, buildingList);
@@ -42,15 +33,12 @@ public class Dijkstra {
         PriorityQueue<NodePath> queue = new PriorityQueue<>();
         queue.add(new NodePath(source, 0));
         while (!queue.isEmpty()){
-            System.out.println("while state");
             NodePath current = queue.poll();
-            System.out.println("Current: " + current.getNode());
             String currentNode = current.getNode();
             double currentDistance = current.getDistance();
 
             if (currentNode.trim().equalsIgnoreCase(destination)) {
                 // Destination reached, construct the shortest path
-
                 System.out.println("if state");
                 List<String> path = new ArrayList<>();
                 while (currentNode != null) {

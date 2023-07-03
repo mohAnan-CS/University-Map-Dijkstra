@@ -39,7 +39,7 @@
          </font>
       </Text>
       <TextField fx:id="textFiled" layoutX="1047.0" layoutY="136.0" promptText="Enter Building Name" />
-      <Button layoutX="1248.0" layoutY="136.0" mnemonicParsing="false" onAction="#buttonOnAction" text="Button" />
+      <Button fx:id="buildingNameBtn" layoutX="1248.0" layoutY="136.0" mnemonicParsing="false" onAction="#buttonOnAction" text="Button" />
       <ComboBox fx:id="sourceComboBox" layoutX="1132.0" layoutY="195.0" prefHeight="26.0" prefWidth="185.0" />
       <ComboBox fx:id="destinationComboBox" layoutX="1129.0" layoutY="269.0" prefHeight="26.0" prefWidth="192.0" />
       <Button layoutX="1140.0" layoutY="388.0" mnemonicParsing="false" onAction="#travelOnAction" text="Travel">

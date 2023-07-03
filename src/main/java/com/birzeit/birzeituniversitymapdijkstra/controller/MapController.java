@@ -22,6 +22,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
 
 import java.io.BufferedReader;
@@ -53,6 +54,9 @@ public class MapController implements Initializable {
     @FXML
     private TextArea pathTextArea;
 
+    @FXML
+    private Button buildingNameBtn;
+
     public static List<Vertex> buildingList = new ArrayList<>();
     public List<Line> lineList = new ArrayList<>();
 
@@ -63,18 +67,23 @@ public class MapController implements Initializable {
             //Read data from building file
             GraphReader graphReader = new GraphReader();
             buildingList = graphReader.readGraphFromFile("buildings.txt");
+
             drawCircleOnMap(buildingList);
             fillComboBox(buildingList);
+            customizeComboBox(sourceComboBox);
+            customizeComboBox(destinationComboBox);
+            customizePathArea();
 
-            pathTextArea.setWrapText(true); // Enable text wrapping
-            pathTextArea.setStyle("-fx-font-size: 14px; -fx-font-family: Arial;-fx-display-caret:true;"); // Customize font size and family
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+    }
 
+    private void customizePathArea(){
 
-
+        pathTextArea.setWrapText(true); // Enable text wrapping
+        pathTextArea.setStyle("-fx-font-size: 14px; -fx-font-family: Arial;-fx-display-caret:true;");
 
     }
 
@@ -97,27 +106,20 @@ public class MapController implements Initializable {
         StringBuilder pathString = new StringBuilder();
         int count = 0;
         for (String s : path) {
-            if (count == 0){
-                pathString.append(s);
-                pathString.append(" \n ");
-                pathString.append(" \u2193 ");
-                pathString.append(" \n ");
-                count++;
-            }else {
-                if (path.size()-1 == count){
+            if (count != 0) {
+                if (path.size() - 1 == count) {
                     pathString.append(" \n ");
                     pathString.append(s);
                     pathString.append(" \n ");
                     break;
                 }
                 pathString.append(" \n ");
-                pathString.append(s);
-                pathString.append(" \n ");
-                pathString.append(" \u2193 ");
-                pathString.append(" \n ");
-                count++;
             }
-
+            pathString.append(s);
+            pathString.append(" \n ");
+            pathString.append(" \u2193 ");
+            pathString.append(" \n ");
+            count++;
         }
 
         pathTextArea.setText(pathString.toString());
@@ -286,40 +288,24 @@ public class MapController implements Initializable {
             listDest.add(buildingName);
         }
 
-        sourceComboBox.setStyle("-fx-background-color: #e33131; -fx-font-size: 14px; -fx-padding: 5px; -fx-font-weight: bold ;" +
-                "-fx-border-color: #1e1c1c; -fx-border-width: 4px; -fx-border-radius: 5px; -fx-background-radius: 16px;" +
-                "-fx-cell-hover-color: #e33131; " );
-
         sourceComboBox.setItems(listSource);
-
-        sourceComboBox.setCellFactory(param -> new ListCell<String>() {
-            private final ImageView icon = new ImageView(new Image("C:\\Users\\twitter\\IdeaProjects\\BirzeitUniversityMapDijkstra\\src\\main\\java\\com\\birzeit\\birzeituniversitymapdijkstra\\images\\building.png"));
-
-            {
-                // Set the desired size of the icon
-                icon.setFitWidth(16);
-                icon.setFitHeight(16);
-            }
-
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (empty || item == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(item);
-                    setGraphic(icon);
-                }
-            }
-        });
         destinationComboBox.setItems(listDest);
-        destinationComboBox.setStyle("-fx-background-color: #e33131; -fx-font-size: 14px; -fx-padding: 5px; -fx-font-weight: bold ;" +
-                "-fx-border-color: #1e1c1c; -fx-border-width: 4px; -fx-border-radius: 5px; -fx-background-radius: 16px;" +
-                "-fx-cell-hover-color: #e33131; " );
 
-        destinationComboBox.setCellFactory(param -> new ListCell<String>() {
+    }
+
+    private void customizeComboBox(ComboBox<String> comboBox){
+
+        comboBox.setStyle("-fx-background-color: #e33131;" +
+                "-fx-font-size: 14px;" +
+                " -fx-padding: 5px; " +
+                "-fx-font-weight: bold ;" +
+                "-fx-border-color: #1e1c1c; " +
+                "-fx-border-width: 4px; " +
+                "-fx-border-radius: 5px; " +
+                "-fx-background-radius: 16px;" +
+                "-fx-cell-hover-color: #e33131; ");
+
+        comboBox.setCellFactory(param -> new ListCell<String>() {
             private final ImageView icon = new ImageView(new Image("C:\\Users\\twitter\\IdeaProjects\\BirzeitUniversityMapDijkstra\\src\\main\\java\\com\\birzeit\\birzeituniversitymapdijkstra\\images\\building.png"));
 
             {

@@ -16,9 +16,8 @@ public class GraphReader {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
-            Boolean isNumBuildEdgeRead = false;
+            boolean isNumBuildEdgeRead = false;
             int numberOfBuildings = 0;
-            int numberOfEdges = 0;
             int counter = 0;
             while ((line = reader.readLine()) != null) {
 
@@ -26,7 +25,6 @@ public class GraphReader {
                     //Read Number of buildings.txt and edges
                     String[] lineSplit = line.split(",");
                     numberOfBuildings = Integer.parseInt(lineSplit[0].trim());
-                    numberOfEdges = Integer.parseInt(lineSplit[1].trim());
                     isNumBuildEdgeRead = true;
                 }else{
 
@@ -62,7 +60,6 @@ public class GraphReader {
             exception.printStackTrace();
         }
 
-        List<Vertex> vertices = Graph.buildingList;
         return Graph.buildingList;
 
     }
