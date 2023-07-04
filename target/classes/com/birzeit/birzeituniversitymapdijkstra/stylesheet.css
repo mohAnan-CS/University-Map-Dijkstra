@@ -13,3 +13,7 @@
 .centeredTextArea .scroll-pane .content .text {
     -fx-text-alignment: center;
 }
+
+.button{
+    -fx-background-color: #706868;
+}

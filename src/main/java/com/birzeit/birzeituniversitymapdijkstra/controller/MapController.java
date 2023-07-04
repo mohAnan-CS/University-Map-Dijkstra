@@ -1,8 +1,6 @@
 package com.birzeit.birzeituniversitymapdijkstra.controller;
 
-import com.birzeit.birzeituniversitymapdijkstra.model.Building;
 import com.birzeit.birzeituniversitymapdijkstra.model.DijkstraResult;
-import com.birzeit.birzeituniversitymapdijkstra.model.Graph;
 import com.birzeit.birzeituniversitymapdijkstra.model.Vertex;
 import com.birzeit.birzeituniversitymapdijkstra.service.Dijkstra;
 import com.birzeit.birzeituniversitymapdijkstra.service.GraphReader;
@@ -14,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -22,17 +19,12 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
 import javafx.scene.text.Font;
-
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MapController implements Initializable {
 
@@ -57,6 +49,17 @@ public class MapController implements Initializable {
     @FXML
     private Button buildingNameBtn;
 
+    @FXML
+    private Button resetBtn;
+
+    private int flag = 0; // flag == 0 means the user didn't choose a source building yet , flag == 1 means the user chose a source building
+
+    private Circle srcCircle = null;
+    private Circle destCircle = null;
+    private Label srcLabel = null;
+    private Label destLabel = null;
+
+
     public static List<Vertex> buildingList = new ArrayList<>();
     public List<Line> lineList = new ArrayList<>();
 
@@ -64,6 +67,10 @@ public class MapController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
+
+            buildingNameBtn.setVisible(false);
+            textFiled.setVisible(false);
+
             //Read data from building file
             GraphReader graphReader = new GraphReader();
             buildingList = graphReader.readGraphFromFile("buildings.txt");
@@ -73,6 +80,7 @@ public class MapController implements Initializable {
             customizeComboBox(sourceComboBox);
             customizeComboBox(destinationComboBox);
             customizePathArea();
+            //distanceTextField.setDisable(true);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,6 +92,7 @@ public class MapController implements Initializable {
 
         pathTextArea.setWrapText(true); // Enable text wrapping
         pathTextArea.setStyle("-fx-font-size: 14px; -fx-font-family: Arial;-fx-display-caret:true;");
+        //pathTextArea.setDisable(true);
 
     }
 
@@ -182,25 +191,57 @@ public class MapController implements Initializable {
             double x = buildingsList.get(i).getXCoordinate();
             double y = buildingsList.get(i).getYCoordinate();
 
-            Circle circle = new Circle();
-            circle.setCenterX(x);
-            circle.setCenterY(y);
-            circle.setRadius(6.5);
-            circle.setFill(Color.RED);
-            circle.setStroke(Color.BLACK);
-            circle.setStrokeWidth(1.5);
+            Circle circle = createCircle(x,y);
             anchorPane.getChildren().add(circle);
 
             Label label = new Label();
             label.setText(" " + buildingName + " ");
 
-            circle.setOnMousePressed(mouseEvent -> {
+            AtomicBoolean isChosen = new AtomicBoolean(false);
 
-                System.out.println(buildingName);
+            setCircleOnMousePressed(buildingName, x, y, circle, label, isChosen);
+            setCircleOnMouseEntered(buildingName, x, y, circle, label, isChosen);
+            setCircleOnMouseExited(buildingName, x, y, circle, label, isChosen);
 
-            });
+        }
 
-            circle.setOnMouseEntered(mouseEvent -> {
+    }
+
+    private Circle createCircle(double x, double y) {
+
+        Circle circle = new Circle();
+        circle.setCenterX(x);
+        circle.setCenterY(y);
+        circle.setRadius(6.5);
+        circle.setFill(Color.RED);
+        circle.setStroke(Color.BLACK);
+        circle.setStrokeWidth(1.5);
+
+        return circle;
+
+    }
+
+    private void setCircleOnMouseExited(String buildingName, double x, double y, Circle circle, Label label, AtomicBoolean isChosen) {
+
+        circle.setOnMouseExited(mouseEvent -> {
+
+            if (isChosen.get()) {
+
+            }else {
+                circle.setRadius(6.5);
+                circle.setStrokeWidth(1.5);
+                anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
+            }
+
+        });
+
+    }
+
+    private void setCircleOnMouseEntered(String buildingName, double x, double y, Circle circle, Label label, AtomicBoolean isChosen) {
+
+        circle.setOnMouseEntered(mouseEvent -> {
+
+            if (!isChosen.get()) {
 
                 label.setLayoutY(y - 27);
                 label.setLayoutX(x);
@@ -211,27 +252,49 @@ public class MapController implements Initializable {
                 circle.setStrokeWidth(2.5);
 
                 BackgroundFill backgroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(10), null);
-
-                // Create a background with the background fill
                 Background background = new Background(backgroundFill);
 
-                // Set the background of the label
                 label.setBackground(background);
-
                 anchorPane.getChildren().add(label);
 
-            });
+            }
 
-            circle.setOnMouseExited(mouseEvent -> {
+        });
 
-                circle.setRadius(6.5);
-                circle.setStrokeWidth(1.5);
-                anchorPane.getChildren().remove(anchorPane.getChildren().size() - 1);
+    }
 
-            });
+    private void setCircleOnMousePressed(String buildingName, double x, double y, Circle circle, Label label, AtomicBoolean isChosen) {
 
+        circle.setOnMousePressed(mouseEvent -> {
 
-        }
+            if (srcCircle == null || destCircle == null){
+
+                if (isChosen.get()){
+                    System.out.println("isChosen : " + isChosen.get() + " " + buildingName);
+                    isChosen.set(false);
+                    circle.setFill(Color.RED);
+                }else{
+                    isChosen.set(true);
+                    if (flag == 0){
+                        sourceComboBox.setValue(buildingName);
+                        circle.setFill(Color.BLACK);
+                        srcCircle = circle;
+                        srcLabel = label;
+                        flag = 1;
+                    }else{
+                        destinationComboBox.setValue(buildingName);
+                        circle.setFill(Color.YELLOW);
+                        flag = 0;
+                        destCircle = circle;
+                        destLabel = label;
+                    }
+                }
+
+                circle.setStrokeWidth(3.5);
+
+            }
+
+        });
 
     }
 
@@ -329,4 +392,33 @@ public class MapController implements Initializable {
         });
 
     }
+
+    @FXML
+    void resetBtnOnAction(ActionEvent event) {
+
+        destinationComboBox.setValue("");
+        sourceComboBox.setValue("");
+        pathTextArea.setText("");
+        distanceTextField.setText("");
+        anchorPane.getChildren().removeIf(node ->
+                node instanceof Circle || node instanceof Line || node instanceof Label);
+        buildingList = null;
+        flag = 0;
+        srcCircle = null;
+        destCircle = null;
+
+        GraphReader graphReader = new GraphReader();
+        try {
+            buildingList = graphReader.readGraphFromFile("buildings.txt");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        drawCircleOnMap(buildingList);
+        fillComboBox(buildingList);
+
+
+    }
+
+
 }

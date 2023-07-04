@@ -7,7 +7,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -25,27 +24,28 @@
             <Image url="@university-map.jpg" />
          </image>
       </ImageView>
-      <Line endX="1122.0" endY="7.62939453125E-6" layoutX="225.0" layoutY="107.0" startX="-227.40000915527344" startY="7.62939453125E-6" stroke="#ee0101" strokeWidth="5.0" />
       <TextArea fx:id="pathTextArea" layoutX="1064.0" layoutY="540.0" prefHeight="156.0" prefWidth="245.0" />
       <TextField fx:id="distanceTextField" layoutX="1090.0" layoutY="469.0" />
-      <Text fill="#bfb8b8" layoutX="1008.0" layoutY="217.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source">
+      <Text fill="#140202" layoutX="1016.0" layoutY="224.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Source">
          <font>
-            <Font size="23.0" />
+            <Font name="System Bold" size="19.0" />
          </font>
       </Text>
-      <Text fill="#bfb8b8" layoutX="1005.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destination">
+      <Text fill="#110000" layoutX="1013.0" layoutY="295.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Destination">
          <font>
-            <Font size="23.0" />
+            <Font name="System Bold" size="19.0" />
          </font>
       </Text>
       <TextField fx:id="textFiled" layoutX="1047.0" layoutY="136.0" promptText="Enter Building Name" />
       <Button fx:id="buildingNameBtn" layoutX="1248.0" layoutY="136.0" mnemonicParsing="false" onAction="#buttonOnAction" text="Button" />
       <ComboBox fx:id="sourceComboBox" layoutX="1132.0" layoutY="195.0" prefHeight="26.0" prefWidth="185.0" />
       <ComboBox fx:id="destinationComboBox" layoutX="1129.0" layoutY="269.0" prefHeight="26.0" prefWidth="192.0" />
-      <Button layoutX="1140.0" layoutY="388.0" mnemonicParsing="false" onAction="#travelOnAction" text="Travel">
+      <Button layoutX="1194.0" layoutY="388.0" mnemonicParsing="false" onAction="#travelOnAction" text="Travel">
          <font>
             <Font name="System Bold" size="17.0" />
          </font>
       </Button>
+      <Button fx:id="resetBtn" layoutX="1105.0" layoutY="388.0" mnemonicParsing="false" onAction="#resetBtnOnAction" text="Reset" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ee0101" height="5.0" layoutX="-2.0" layoutY="106.0" stroke="#ff0505" strokeType="INSIDE" width="1350.0" />
    </children>
 </AnchorPane>
