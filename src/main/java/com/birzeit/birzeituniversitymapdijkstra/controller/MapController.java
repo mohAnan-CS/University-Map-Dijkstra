@@ -83,7 +83,7 @@ public class MapController implements Initializable {
             //distanceTextField.setDisable(true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            showAlert("Error", "Error", e.getMessage(), Alert.AlertType.ERROR);
         }
 
     }
@@ -96,44 +96,64 @@ public class MapController implements Initializable {
 
     }
 
+    private void showAlert(String title, String headerText, String contentText, Alert.AlertType alertType) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
+    }
+
     @FXML
     void travelOnAction() {
 
-        anchorPane.getChildren().removeAll(lineList);
+        try {
 
-        String sourceBuilding = sourceComboBox.getValue();
-        String destBuilding = destinationComboBox.getValue();
 
-        Dijkstra dijkstra = new Dijkstra();
-        DijkstraResult dijkstraResult = dijkstra.findShortestPath(buildingList,sourceBuilding,destBuilding);
-
-        List<String> path = dijkstraResult.getPath();
-        double distance = dijkstraResult.getDistance();
-
-        distanceTextField.setText(String.valueOf(distance));
-
-        StringBuilder pathString = new StringBuilder();
-        int count = 0;
-        for (String s : path) {
-            if (count != 0) {
-                if (path.size() - 1 == count) {
-                    pathString.append(" \n ");
-                    pathString.append(s);
-                    pathString.append(" \n ");
-                    break;
-                }
-                pathString.append(" \n ");
+            if (sourceComboBox.getValue().trim().equalsIgnoreCase("") || destinationComboBox.getValue().trim().equalsIgnoreCase("")) {
+                throw new IllegalArgumentException("Please choose a source and destination building");
             }
-            pathString.append(s);
-            pathString.append(" \n ");
-            pathString.append(" \u2193 ");
-            pathString.append(" \n ");
-            count++;
+
+            anchorPane.getChildren().removeAll(lineList);
+
+            String sourceBuilding = sourceComboBox.getValue();
+            String destBuilding = destinationComboBox.getValue();
+
+            Dijkstra dijkstra = new Dijkstra();
+            DijkstraResult dijkstraResult = dijkstra.findShortestPath(buildingList, sourceBuilding, destBuilding);
+
+            List<String> path = dijkstraResult.getPath();
+            double distance = dijkstraResult.getDistance();
+
+            distanceTextField.setText(String.valueOf(distance));
+
+            StringBuilder pathString = new StringBuilder();
+            int count = 0;
+            for (String s : path) {
+                if (count != 0) {
+                    if (path.size() - 1 == count) {
+                        pathString.append(" \n ");
+                        pathString.append(s);
+                        pathString.append(" \n ");
+                        break;
+                    }
+                    pathString.append(" \n ");
+                }
+                pathString.append(s);
+                pathString.append(" \n ");
+                pathString.append(" \u2193 ");
+                pathString.append(" \n ");
+                count++;
+            }
+
+            pathTextArea.setText(pathString.toString());
+            drawLinesPath(path);
+
+        }catch (IllegalArgumentException e) {
+            showAlert("Error", "Error", e.getMessage(), Alert.AlertType.ERROR);
+        } catch (Exception exception) {
+            showAlert("Error", "Error", exception.getMessage(), Alert.AlertType.ERROR);
         }
-
-        pathTextArea.setText(pathString.toString());
-        drawLinesPath(path);
-
 
     }
 
